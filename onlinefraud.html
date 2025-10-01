@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Fraud Detection System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://cdn.sanity.io/images/9sed75bn/production/470934de877c88a13171081ae22e98994ce9cbd7-1792x1008.png?auto=format');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>UPI Fraud Detection System</h1>
+
+        <div class="form-group">
+            <label for="amount">Transaction Amount (1 to 100000):</label>
+            <input type="number" id="amount" min="1" max="100000" required>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Transaction Location:</label>
+            <input type="text" id="location" required>
+        </div>
+
+        <div class="form-group">
+            <label for="time">Transaction Time (HH:MM):</label>
+            <input type="time" id="time" required>
+        </div>
+
+        <div class="form-group">
+            <label for="recipient">Recipient History:</label>
+            <select id="recipient">
+                <option value="known">Known Recipient</option>
+                <option value="unknown">Unknown Recipient</option>
+            </select>
+        </div>
+
+        <button onclick="detectFraud()">Check Transaction</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function predictFraud(transactionData) {
+            let riskScore = 0;
+
+            if (transactionData.amount > 50000) riskScore += 0.2;
+            if (transactionData.amount > 90000) riskScore += 0.1;
+            if (transactionData.location !== 'home') riskScore += 0.2;
+            if (transactionData.time < '06:00' || transactionData.time > '23:00') riskScore += 0.2;
+            if (transactionData.recipient === 'unknown') riskScore += 0.3;
+
+            return riskScore;
+        }
+
+        function detectFraud() {
+            const amountInput = document.getElementById('amount');
+            const amount = parseFloat(amountInput.value);
+
+            if (amount < 1 || amount > 1000000) {
+                alert("Please enter an amount between 1 and 100000.");
+                amountInput.value = "";
+                return;
+            }
+
+            const transactionData = {
+                amount: amount,
+                location: document.getElementById('location').value.toLowerCase(),
+                time: document.getElementById('time').value,
+                recipient: document.getElementById('recipient').value
+            };
+
+            const riskScore = predictFraud(transactionData);
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+
+            if (riskScore > 0.7) {
+                resultDiv.style.backgroundColor = '#ffebee';
+                resultDiv.innerHTML = `
+                    <h3>High Fraud Risk (${(riskScore * 100).toFixed(1)}%)</h3>
+                    <p>This transaction appears suspicious. Please verify the details.</p>
+                `;
+            } else if (riskScore > 0.4) {
+                resultDiv.style.backgroundColor = '#fff3e0';
+                resultDiv.innerHTML = `
+                    <h3>Medium Fraud Risk (${(riskScore * 100).toFixed(1)}%)</h3>
+                    <p>This transaction shows some risk factors. Proceed with caution.</p>
+                `;
+            } else {
+                resultDiv.style.backgroundColor = '#e8f5e9';
+                resultDiv.innerHTML = `
+                    <h3>Low Fraud Risk (${(riskScore * 100).toFixed(1)}%)</h3>
+                    <p>This transaction appears safe.</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
