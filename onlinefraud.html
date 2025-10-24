@@ -1,166 +1,2680 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPI Fraud Detection System</title>
+    <title>UPI Fraud Detect - Your Protection Against UPI Fraud</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Reset and Base Styles */
+        * {
             margin: 0;
             padding: 0;
-            background-image: url('https://cdn.sanity.io/images/9sed75bn/production/470934de877c88a13171081ae22e98994ce9cbd7-1792x1008.png?auto=format');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            width: 80%;
-            max-width: 600px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
             box-sizing: border-box;
         }
 
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1e40af;
+            --safety-green: #10b981;
+            --warning-amber: #f59e0b;
+            --danger-red: #ef4444;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --gray-light: #e2e8f0;
+            --gray-dark: #64748b;
+            --text-dark: #1e293b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: #ADD8E6; /* Light blue */
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
             width: 100%;
-            font-size: 16px;
+            top: 0;
+            z-index: 1000;
         }
 
-        button:hover {
-            background-color: #45a049;
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
         }
 
-        #result {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 4px;
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+
+        .nav-logo i {
+            font-size: 1.8rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 1rem;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--primary-blue);
+        }
+
+        .signup-button-nav {
+            background-color: var(--danger-red);
+            color: white !important;
+            padding: 10px 15px;
+            border-radius: 6px;
+        }
+
+        .hamburger {
             display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-dark);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Alert Ticker */
+        .alert-ticker {
+            background: linear-gradient(135deg, var(--danger-red), #dc2626);
+            color: var(--white);
+            padding: 10px 0;
+            margin-top: 70px;
+            overflow: hidden;
+        }
+
+        .ticker-wrap {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 15s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(100vw); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .ticker-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .alert-badge {
+            background: var(--white);
+            color: var(--danger-red);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            padding: 80px 0; /* Increased padding */
+            min-height: 500px; /* Added min-height */
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        #auth.section.active {
+            background: linear-gradient(135deg, #ffffff, #10b981);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative; /* Needed for the leaves animation */
+            overflow: hidden; /* Hide leaves that go outside the section */
+        }
+
+        .login-container {
             text-align: center;
         }
 
-        h1 {
+        .login-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            width: 900px; /* Increased width */
+            height: 500px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .login-left {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-left img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .login-right {
+            flex: 2;
+            padding: 2rem;
+            color: var(--text-dark);
+        }
+
+        .login-tabs {
+            display: flex;
+            gap: 2rem; /* Increased gap */
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-dark);
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .tab-btn.active.user-tab {
+            border-bottom: 2px solid var(--safety-green);
+        }
+
+        .tab-btn.active.admin-tab {
+            border-bottom: 2px solid var(--warning-amber);
+        }
+
+        .login-form {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .login-form.form-active {
+            display: block;
+            opacity: 1;
+        }
+
+        .login-right h2 {
+            margin-bottom: 1rem;
+        }
+
+        .login-right input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .login-right button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: var(--primary-blue);
+            color: white;
+            cursor: pointer;
+        }
+
+        .back-to-home {
+            color: white;
+            text-decoration: none;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        .money-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .money {
+            position: absolute;
+            font-size: 2rem;
+            color: #22c55e; /* A green color for money */
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        .money-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .money {
+            position: absolute;
+            font-size: 2rem;
+            color: #22c55e; /* A green color for money */
+            animation: fall linear infinite;
+        }
+
+        /* User Dashboard Section */
+        #user-dashboard.section.active {
+            background: linear-gradient(135deg, #ffffff, #10b981); /* Same as auth section */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Admin Dashboard Section */
+        #admin-dashboard.section.active {
+            background: linear-gradient(135deg, #ffffff, #10b981); /* Same as auth section */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Admin Dashboard Section */
+        #admin-dashboard.section.active {
+            background: linear-gradient(135deg, #ffffff, #10b981); /* Same as auth section */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Admin Dashboard Section */
+        #admin-dashboard.section.active {
+            background: linear-gradient(135deg, #ffffff, #10b981); /* Same as auth section */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+
+
+        .dashboard-container {
             text-align: center;
-            margin-bottom: 20px;
-            color: #333;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            color: var(--text-dark);
+            max-width: 900px;
+            width: 90%;
+        }
+
+        .dashboard-container h2 {
+            margin-bottom: 2rem;
+            font-size: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .dashboard-card i {
+            font-size: 3rem;
+            color: var(--primary-blue); /* Or a green color */
+            margin-bottom: 1rem;
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-card p {
+            font-size: 0.9rem;
+            color: var(--gray-dark);
+        }
+
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 40px;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .hero-description {
+            font-size: 1.1rem;
+            color: var(--gray-dark);
+            margin-bottom: 2rem;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            padding: 20px 40px; /* Increased padding */
+            font-size: 1.3rem; /* Increased font size */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            padding: 20px 40px; /* Increased padding */
+            font-size: 1.3rem; /* Increased font size */
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+
+.hero-main {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem; /* Add some space between hero-main and hero-stats */
+}
+
+.hero-content {
+    flex: 1;
+    text-align: left;
+}
+
+.hero-image {
+    flex: 1;
+}
+
+        .hero-image img {
+            width: 100%;
+            max-width: 700px; /* Adjust as needed */
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .quick-links {
+            background-color: #ADD8E6; /* Light blue from services-section background */
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 3rem; /* Added margin-top for spacing */
+        }
+
+        .quick-links h2 {
+            color: var(--text-dark); /* Changed to dark for readability */
+        }
+
+        /* Link Card Styles for Quick Access */
+        .link-card {
+            background: linear-gradient(45deg, #4285F4, #0F9D58); /* Radiant blue */
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid #800000; /* Maroon border on hover */
+        }
+
+        .link-card i {
+            font-size: 2.5rem;
+            color: var(--white); /* Changed to white for readability */
+            margin-bottom: 1rem;
+        }
+
+        .link-card h3 {
+            color: var(--white); /* Changed to white for readability */
+            margin-bottom: 0.5rem;
+        }
+
+        .link-card p {
+            color: var(--white); /* Changed to white for readability */
+            font-size: 0.9rem;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Horizontal arrangement */
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        /* WHY CHOOSE US Section Styles */
+.why-choose-us-main {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Decreased gap */
+    margin-top: 2rem; /* Add some space between hero-main and hero-stats */
+}
+
+        .why-choose-us-image {
+            flex: 1;
+        }
+
+        .why-choose-us-image img {
+            width: 100%;
+            max-width: 500px; /* Adjust as needed */
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .why-choose-us-content {
+            flex: 1;
+            text-align: left;
+        }
+
+        .why-choose-us-content p {
+            font-size: 0.9rem; /* Decreased font size */
+        }
+
+        /* Removed conflicting white text color styles */
+
+        .why-choose-us-content h4 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-blue);
+        }
+
+        .why-choose-us-subtitle {
+            /* margin-left: 20px; Removed as headings are now inside why-choose-us-content */
+        }
+
+        @media (max-width: 768px) {
+            .why-choose-us-main {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .why-choose-us-content {
+                text-align: center;
+            }
+        }
+
+        /* Scams Grid */        .scams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .scam-card {
+            background: linear-gradient(45deg, #4285F4, #0F9D58); /* Radiant blue */
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--danger-red); /* Keep original border for distinction */
+            transition: transform 0.3s, box-shadow 0.3s, border 0.3s; /* Add border to transition */
+        }
+
+        .scam-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid #800000; /* Maroon border on hover */
+        }
+
+        .scam-card h3 {
+            color: var(--white); /* Changed to white for readability */
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .scam-content h4 {
+            color: var(--white); /* Changed to white for readability */
+            margin: 1rem 0 0.5rem;
+        }
+
+        .scam-content li i {
+            color: var(--white); /* Changed to white for readability */
+        }
+
+        /* Tools Section */
+        .tool-section {
+            background: linear-gradient(45deg, #4285F4, #0F9D58); /* Radiant blue */
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s, border 0.3s; /* Add border to transition */
+        }
+
+        .tool-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid #800000; /* Maroon border on hover */
+        }
+
+        .tool-section h2,
+        .tool-section h3,
+        .tool-section label {
+            color: var(--white); /* Changed to white for readability */
+        }
+
+        .scam-checker {
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        .analyze-btn {
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: var(--white);
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .analysis-result {
+            margin-top: 2rem;
+            padding: 2rem;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .analysis-result.high-risk {
+            background: #fef2f2;
+            border: 2px solid var(--danger-red);
+            color: var(--danger-red);
+        }
+
+        .analysis-result.medium-risk {
+            background: #fffbeb;
+            border: 2px solid var(--warning-amber);
+            color: var(--warning-amber);
+        }
+
+        .analysis-result.low-risk {
+            background: #f0fdf4;
+            border: 2px solid var(--safety-green);
+            color: var(--safety-green);
+        }
+
+        /* Services Section Styles */
+        .services-section {
+            margin-top: 3rem;
+            text-align: center;
+            background-color: #ADD8E6; /* Light blue from Quick Access background */
+            padding: 40px 0; /* Add some padding for better visual */
+        }
+
+        .services-section h2,
+        .services-section h3 {
+            color: var(--text-dark); /* Changed to dark for readability */
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .service-card {
+            background: linear-gradient(45deg, #4285F4, #0F9D58); /* Radiant blue from Quick Access link-card */
+            padding: 2rem; /* Increased padding to match Quick Access link-card */
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            color: var(--white); /* Changed to white for readability */
+            cursor: pointer; /* Added cursor pointer */
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border: 1px solid #800000; /* Maroon border on hover */
+        }
+
+        .service-card i {
+            font-size: 2.5rem; /* Adjusted font size to match Quick Access link-card */
+            color: var(--white); /* Changed to white for readability */
+            margin-bottom: 1rem;
+        }
+
+        .service-card h4 {
+            font-size: 1.4rem; /* Adjusted font size to match Quick Access link-card h3 */
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .service-card p {
+            font-size: 0.9rem; /* Adjusted font size to match Quick Access link-card */
+            color: var(--white);
+        }
+
+
+
+
+        /* Quiz Styles */
+        .quiz-container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+
+        .quiz-start-btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        .quiz-question {
+            margin-bottom: 2rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .quiz-option {
+            padding: 1rem;
+            border: 2px solid var(--gray-light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-blue);
+            background: #f0f7ff;
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-blue);
+            background: #dbeafe;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--safety-green);
+            background: #dcfce7;
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger-red);
+            background: #fecaca;
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        /* Emergency Steps */
+        .emergency-steps {
+            display: grid;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .step-card {
+            background: linear-gradient(45deg, #4285F4, #0F9D58); /* Radiant blue */
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            transition: transform 0.3s, box-shadow 0.3s, border 0.3s; /* Add border to transition */
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid #800000; /* Maroon border on hover */
+        }
+
+        .step-card.urgent {
+            border-left: 5px solid var(--danger-red);
+        }
+
+        .step-number {
+            background: var(--primary-blue);
+            color: var(--white);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            margin-bottom: 1rem;
+            color: var(--white); /* Changed to white for readability */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-card p,
+        .step-card li {
+            color: var(--white); /* Changed to white for readability */
+        }
+
+        .report-form {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .report-form input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .report-btn {
+            background: var(--danger-red);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .contact-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        /* Prevention Tips */
+        .prevention-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .do-section h3,
+        .dont-section h3 {
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .do-section h3 {
+            color: var(--safety-green);
+        }
+
+        .dont-section h3 {
+            color: var(--danger-red);
+        }
+
+        .tip-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            transition: transform 0.3s, box-shadow 0.3s, border 0.3s; /* Add border to transition */
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid #800000; /* Maroon border on hover */
+        }
+
+        .do-tip {
+            background: linear-gradient(45deg, #4285F4, #0F9D58); /* Radiant blue */
+            border-left: 4px solid var(--safety-green);
+        }
+
+        .do-tip i {
+            color: var(--white); /* Changed to white for readability */
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .dont-tip {
+            background: linear-gradient(45deg, #4285F4, #0F9D58); /* Radiant blue */
+            border-left: 4px solid var(--danger-red);
+        }
+
+        .dont-tip i {
+            color: var(--white); /* Changed to white for readability */
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+        }
+
+        .tip-card strong,
+        .tip-card p {
+            color: var(--white); /* Changed to white for readability */
+        }
+
+        /* Blog Section */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .blog-card {
+            background: linear-gradient(45deg, #4285F4, #0F9D58); /* Radiant blue */
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s, border 0.3s; /* Add border to transition */
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            border: 1px solid #800000; /* Maroon border on hover */
+        }
+
+        .blog-date {
+            color: var(--white); /* Changed to white for readability */
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-card h3 {
+            color: var(--white); /* Changed to white for readability */
+            margin-bottom: 1rem;
+        }
+
+        .blog-card p {
+            color: var(--white); /* Changed to white for readability */
+        }
+
+        .read-more {
+            color: var(--white); /* Changed to white for readability */
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3,
+        .footer-section h4 {
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--gray-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #374151;
+            color: var(--gray-light);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 70px;
+                flex-direction: column;
+                background: var(--white);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+                padding: 2rem 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .prevention-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .report-form {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>UPI Fraud Detection System</h1>
-
-        <div class="form-group">
-            <label for="amount">Transaction Amount (1 to 100000):</label>
-            <input type="number" id="amount" min="1" max="100000" required>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>UPI Fraud Detection</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" onclick="showSection('home')">Home</a></li>
+                <li><a href="#auth" onclick="showSection('auth'); switchLogin('user');">Login</a></li>
+                <li><a href="#auth" class="signup-button-nav" onclick="showSection('auth'); switchLogin('user');">Sign Up</a></li>
+                <li><a href="#about" onclick="showSection('about')">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
+    </nav>
 
-        <div class="form-group">
-            <label for="location">Transaction Location:</label>
-            <input type="text" id="location" required>
+    <!-- Live Alert Ticker -->
+    <div class="alert-ticker">
+        <div class="ticker-wrap">
+            <div class="ticker-content">
+                <span class="alert-badge">ALERT</span>
+                <span>New 'Electricity Bill' scam circulating via SMS - Never share OTP!</span>
+            </div>
         </div>
-
-        <div class="form-group">
-            <label for="time">Transaction Time (HH:MM):</label>
-            <input type="time" id="time" required>
-        </div>
-
-        <div class="form-group">
-            <label for="recipient">Recipient History:</label>
-            <select id="recipient">
-                <option value="known">Known Recipient</option>
-                <option value="unknown">Unknown Recipient</option>
-            </select>
-        </div>
-
-        <button onclick="detectFraud()">Check Transaction</button>
-
-        <div id="result"></div>
     </div>
 
+    <!-- Auth Section -->
+    <section id="auth" class="section">
+        <div class="money-container"></div>
+        <div class="login-container">
+            <div class="login-box">
+                <div class="login-left">
+                    <img src="https://img.freepik.com/premium-photo/man-standing-big-phone-with-message-it_988987-9227.jpg" alt="User Icon">
+                </div>
+                <div class="login-right">
+                    <div id="auth-message" style="display: none; color: green; margin-bottom: 1rem;"></div>
+                    <div class="login-tabs">
+                        <button class="tab-btn user-tab active" onclick="switchLogin('user')">User Login</button>
+                        <button class="tab-btn admin-tab" onclick="switchLogin('admin')">Admin Login</button>
+                    </div>
+                    <div id="user-login-form" class="login-form form-active">
+                        <h2>User Verification</h2>
+                        <form>
+                            <label for="mobile">Mobile Number</label>
+                            <input type="text" id="mobile" placeholder="Enter your mobile number">
+                            <button type="button" onclick="handleAuth('login', 'user')">Send OTP</button>
+                        </form>
+                        <p>Don't have an account? <a href="#" onclick="showUserSignupForm()">Sign Up</a></p>
+                    </div>
+                    <div id="admin-login-form" class="login-form">
+                        <h2>Admin Login</h2>
+                        <form>
+                            <label for="admin-user">Username</label>
+                            <input type="text" id="admin-user" placeholder="Enter your username">
+                            <label for="admin-pass">Password</label>
+                            <input type="password" id="admin-pass" placeholder="Enter your password">
+                            <button type="button" onclick="handleAuth('login', 'admin')">Login</button>
+                        </form>
+                    </div>
+                    <div id="user-signup-form" class="login-form">
+                        <h2>Create Your Account</h2>
+                        <form>
+                            <div class="form-group">
+                                <input type="text" placeholder="Full Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" placeholder="Email Address" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" placeholder="Mobile Number" required>
+                            </div>
+                            <div class="form-group password-group">
+                                <input type="password" placeholder="Create Password" id="user-create-password" required>
+                                <i class="fas fa-eye" onclick="togglePassword('user-create-password')"></i>
+                            </div>
+                            <button type="button" onclick="handleAuth('signup', 'user')">Sign Up</button>
+                        </form>
+                        <p>Already have an account? <a href="#" onclick="showUserLoginForm()">Login</a></p>
+                    </div>
+                </div>
+            </div>
+            <a href="#home" class="back-to-home" onclick="showSection('home')">&larr; Back to Homepage</a>
+        </div>
+    </section>
+
+    <!-- User Dashboard Section (after successful login/signup) -->
+    <section id="user-dashboard" class="section">
+        <div class="dashboard-container">
+            <h2>Administrator Control Panel</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <i class="fas fa-user-plus"></i>
+                    <h3>Create Account</h3>
+                    <p>Create new user or admin accounts.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-users"></i>
+                    <h3>View Users</h3>
+                    <p>Manage and view all registered users.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-store"></i>
+                    <h3>View Merchants</h3>
+                    <p>Oversee and manage merchant accounts.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h3>View Transactions</h3>
+                    <p>Monitor and review all platform transactions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Admin Dashboard Section (after successful admin login) -->
+    <section id="admin-dashboard" class="section">
+        <div class="dashboard-container">
+            <h2>Administrator Control Panel</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <i class="fas fa-user-plus"></i>
+                    <h3>Create Account</h3>
+                    <p>Create new user or admin accounts.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-users"></i>
+                    <h3>View Users</h3>
+                    <p>Manage and view all registered users.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-store"></i>
+                    <h3>View Merchants</h3>
+                    <p>Oversee and manage merchant accounts.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h3>View Transactions</h3>
+                    <p>Monitor and review all platform transactions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Dashboard Section (after successful admin login) -->
+    <section id="admin-dashboard" class="section">
+        <div class="dashboard-container">
+            <h2>Administrator Control Panel</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <i class="fas fa-user-plus"></i>
+                    <h3>Create Account</h3>
+                    <p>Create new user or admin accounts.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-users"></i>
+                    <h3>View Users</h3>
+                    <p>Manage and view all registered users.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-store"></i>
+                    <h3>View Merchants</h3>
+                    <p>Oversee and manage merchant accounts.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h3>View Transactions</h3>
+                    <p>Monitor and review all platform transactions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Dashboard Section (after successful admin login) -->
+    <section id="admin-dashboard" class="section">
+        <div class="dashboard-container">
+            <h2>Administrator Control Panel</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <i class="fas fa-user-plus"></i>
+                    <h3>Create Account</h3>
+                    <p>Create new user or admin accounts.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-users"></i>
+                    <h3>View Users</h3>
+                    <p>Manage and view all registered users.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-store"></i>
+                    <h3>View Merchants</h3>
+                    <p>Oversee and manage merchant accounts.</p>
+                </div>
+                <div class="dashboard-card">
+                    <i class="fas fa-exchange-alt"></i>
+                    <h3>View Transactions</h3>
+                    <p>Monitor and review all platform transactions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Homepage -->
+    <section id="home" class="section active">
+        <div class="hero">
+            <div class="hero-main">
+                <div class="hero-content">
+                    <h1>Stay Safe. Pay Securely.</h1>
+                    <p class="hero-subtitle">Your Shield Against UPI Fraud</p>
+                    <p class="hero-description">Protect yourself from digital payment scams with our comprehensive fraud
+                        detection and prevention tools.</p>
+                    <button class="cta-button" onclick="showSection('tools')">
+                        Check Suspicious Activity <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                <div class="hero-image">
+                    <img src="https://blog.researchandranking.com/wp-content/uploads/2023/03/Secure-your-account-from-UPI-frauds.jpg" alt="Secure your account from UPI frauds">
+                </div>
+            </div>
+
+
+            <!-- New Services Section -->
+            <div class="tool-section">
+                <h2>OUR SERVICES</h2>
+                <h3>What We Can Do For You</h3>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <i class="fas fa-shield-alt"></i> <!-- Icon for Real Time Fraud Detection -->
+                        <h4>Real Time Fraud Detection</h4>
+                        <p>Utilize advanced AI to detect and flag suspicious transactions instantly, protecting your funds.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-user-shield"></i> <!-- Icon for Secure User Accounts -->
+                        <h4>Secure User Accounts</h4>
+                        <p>Implement multi-factor authentication and encryption to safeguard your personal and financial data.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-tools"></i> <!-- Icon for Reliable Merchant Tools -->
+                        <h4>Reliable Merchant Tools</h4>
+                        <p>Provide merchants with secure payment gateways and fraud prevention tools to ensure safe transactions.</p>
+                    </div>
+                    <div class="service-card">
+                        <i class="fas fa-money-check-alt"></i> <!-- Icon for Instant & Safe Payments -->
+                        <h4>Instant & Safe Payments</h4>
+                        <p>Facilitate quick and secure UPI transactions with robust security protocols.</p>
+                    </div>
+                </div>
+
+            <!-- WHY CHOOSE US Section -->
+            <div class="tool-section" style="background: linear-gradient(45deg, #4285F4, #0F9D58); margin-bottom: 3rem;">
+                <h2 style="color: var(--white);">WHY CHOOSE US</h2>
+                <h3 style="color: var(--white);">Turning Data Into Your Financial Shield</h3>
+                <div class="why-choose-us-main">
+                    <div class="why-choose-us-image">
+                        <img src="https://cdn.maxweb.com/maxweb/images/blog/top-10-most-common-affiliate-marketing-questions-2.jpg" alt="Why Choose Us Image">
+                    </div>
+                    <div class="why-choose-us-content">
+                        <p style="color: var(--white);">We turn your financial data into more than just numbers — it becomes your shield. Through real‑time analytics, predictive modeling, and intelligent automation, we continuously monitor every transaction, trend, and behavior for signs of fraud or risk. Our AI‑driven platform transforms raw data into actionable insights, helping you make smart decisions in budgeting, credit, and investments — all while keeping safety front and center. With foresight fueled by historical and behavioral patterns, we guard you from threats before they strike. Your data is no longer passive; it’s a fortress protecting your growth, assets, and peace of mind.</p>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+
+
+
+                <div class="quick-links">
+
+
+
+
+                    <h2><i class="fas fa-th-large"></i> Quick Access</h2>
+
+
+
+
+                    <div class="links-grid">
+
+
+
+
+                        <div class="link-card" onclick="showSection('learn')">
+
+
+
+
+                            <i class="fas fa-graduation-cap"></i>
+
+
+
+
+                            <h3>Top 5 Scams</h3>
+
+
+
+
+                            <p>Learn about common fraud techniques</p>
+
+
+
+
+                        </div>
+
+
+
+
+                        
+
+
+
+
+                        <div class="link-card" onclick="showSection('emergency')">
+
+
+
+
+                            <i class="fas fa-ambulance"></i>
+
+
+
+
+                            <h3>Emergency Response</h3>
+
+
+
+
+                            <p>Immediate steps if scammed</p>
+
+
+
+
+                        </div>
+
+
+
+
+                                        <div class="link-card" onclick="showSection('tools')">
+
+
+
+
+                                            <i class="fas fa-search"></i>
+
+
+
+
+                                            <h3>Check a Number</h3>
+
+
+
+
+                                            <p>Verify suspicious contacts</p>
+
+
+
+
+                                        </div>
+
+
+
+
+                                        
+
+
+
+
+                        
+
+
+
+
+                                    </div>
+
+
+
+
+                                </div>
+
+
+
+
+        
+
+
+
+
+                    <!-- Safety Quiz -->
+
+
+
+
+                    <div id="quizSection" class="tool-section" style="display: none;">
+
+
+
+
+                        <h3><i class="fas fa-brain"></i> UPI Safety Quiz</h3>
+
+
+
+
+                        <div id="quizContainer" class="quiz-container">
+
+
+
+
+                            <div id="quizStart">
+
+
+
+
+                                <p>Test your knowledge about UPI safety with our interactive quiz. Learn to
+
+
+
+
+                                    identify scams and protect yourself!</p>
+
+
+
+
+                                <a href="#" class="quiz-start-btn" style="text-decoration: none; text-align: center;" onclick="startQuiz(); return false;">Start Quiz</a>
+
+
+
+
+                            </div>
+
+
+
+
+                            <div id="quizQuestions" style="display: none;">
+
+
+
+
+                                <!-- Quiz questions will be loaded here -->
+
+
+
+
+                            </div>
+
+
+
+
+                            <div id="quizResult" style="display: none;">
+
+
+
+
+                                <!-- Quiz results will be displayed here -->
+
+
+
+
+                            </div>
+
+
+
+
+                        </div>
+
+
+
+
+                    </div>
+
+
+
+
+
+
+
+            </section>
+    <!-- Learn Section -->
+    <section id="learn" class="section">
+        <div class="container">
+            <h2><i class="fas fa-graduation-cap"></i> Learn About Top 5 UPI Scams</h2>
+            <div class="scams-grid">
+                <!-- Scam 1: Phishing Scams -->
+                <div class="scam-card">
+                    <h3><i class="fas fa-fish"></i> Phishing Scams</h3>
+                    <div class="scam-content">
+                        <p>Fraudsters send deceptive links via SMS, email, or social media, tricking you into entering sensitive information like UPI PINs, OTPs, or bank details on fake websites.</p>
+                        <h4>How to Avoid:</h4>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Never click on suspicious links.</li>
+                            <li><i class="fas fa-check-circle"></i> Always verify the URL of the website.</li>
+                            <li><i class="fas fa-check-circle"></i> Look for "https://_blank" and the padlock icon in the address bar.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Scam 2: Collect Request Scams -->
+                <div class="scam-card">
+                    <h3><i class="fas fa-hand-holding-usd"></i> Collect Request Scams</h3>
+                    <div class="scam-content">
+                        <p>Scammers send payment requests disguised as refunds, cashback, or debit reversals. They pressure you to enter your UPI PIN to "receive" money, which actually authorizes a debit from their account.</p>
+                        <h4>How to Avoid:</h4>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Never approve a collect request from an unknown person.</li>
+                            <li><i class="fas fa-check-circle"></i> Remember, you don't need to enter a PIN to receive money.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Scam 3: Impersonation Scams -->
+                <div class="scam-card">
+                    <h3><i class="fas fa-user-secret"></i> Impersonation Scams</h3>
+                    <div class="scam-content">
+                        <p>Fraudsters pose as bank officials, customer care representatives, or even genuine sellers. They manipulate victims into revealing sensitive financial information or downloading malicious applications.</p>
+                        <h4>How to Avoid:</h4>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Never share your PIN, OTP, or other sensitive data.</li>
+                            <li><i class="fas fa-check-circle"></i> Banks or any legitimate company will never ask for this information.</li>
+                            <li><i class="fas fa-check-circle"></i> If in doubt, hang up and call the official customer care number from the bank's website.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Scam 4: Screen Sharing Scams -->
+                <div class="scam-card">
+                    <h3><i class="fas fa-desktop"></i> Screen Sharing Scams</h3>
+                    <div class="scam-content">
+                        <p>Victims are convinced to download screen-sharing applications (like AnyDesk) under the pretext of resolving an issue or providing support. This grants scammers unauthorized access to their devices, allowing them to perform fraudulent transactions.</p>
+                        <h4>How to Avoid:</h4>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Never install any app at the request of an unknown person.</li>
+                            <li><i class="fas fa-check-circle"></i> Do not grant screen sharing permissions to anyone you don't trust completely.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Scam 5: QR Code Scams -->
+                <div class="scam-card">
+                    <h3><i class="fas fa-qrcode"></i> QR Code Scams</h3>
+                    <div class="scam-content">
+                        <p>Fraudsters send fake QR codes or tamper with legitimate ones. When scanned, these codes lead you to unknowingly authorize payments to the scammer instead of receiving money or paying the intended recipient.</p>
+                        <h4>How to Avoid:</h4>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Be cautious when scanning QR codes from unknown sources.</li>
+                            <li><i class="fas fa-check-circle"></i> Remember that scanning a QR code is for making payments, not receiving them.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+                        <section id="about" class="section">
+                            <div class="container">
+                                <h2>About UPI Fraud Detection</h2>
+                                <p>Our platform is dedicated to empowering users with the knowledge and tools to combat UPI fraud effectively. With the rapid growth of digital payments, understanding the risks and how to protect yourself is more crucial than ever.</p>
+                                <p>We provide up-to-date information on common scam techniques, interactive tools to check suspicious activities, and clear emergency steps to take if you become a victim of fraud. Our goal is to create a safer digital payment ecosystem for everyone.</p>
+                                <h3>Our Mission</h3>
+                                <ul>
+                                    <li>Educate users about various UPI fraud methods.</li>
+                                    <li>Provide practical tools for real-time fraud identification.</li>
+                                    <li>Offer immediate guidance for victims of UPI scams.</li>
+                                    <li>Promote safe and secure digital payment practices.</li>
+                                </ul>
+                                <h3>Explore More</h3>
+                                <ul>
+                                    <li><a href="#learn" onclick="showSection('learn')">Learn About Scams</a></li>
+                                    <li><a href="#emergency" onclick="showSection('emergency')">Emergency Help</a></li>
+                                    <li><a href="#prevention" onclick="showSection('prevention')">Prevention Tips</a></li>
+                                    <li><a href="#blog" onclick="showSection('blog')">Latest Blog & News</a></li>
+                                    <li><a href="#history-section" onclick="showSection('history-section'); fetchHistory();">Analysis History</a></li>
+                                </ul>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="cta-button" onclick="showSection('tools')">
+                Open Scam Checker <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- Interactive Tools Section -->
+    <section id="tools" class="section">
+        <div class="container">
+            <h2>Interactive Safety Tools</h2>
+
+            <!-- History Section -->
+            <section id="history-section" class="section">
+                <div class="container">
+                    <h2><i class="fas fa-history"></i> Analysis History</h2>
+                    <button onclick="fetchHistory()">Refresh History</button>
+                    <div id="history-list">
+                        <!-- History items will be loaded here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Scam Checker -->
+            <div class="tool-section">
+                <h3><i class="fas fa-search"></i> Scam Checker / Fraud Identifier</h3>
+                <div class="scam-checker">
+                    <form id="scamForm">
+                        <div class="form-group">
+                            <label for="phoneNumber">Suspicious Phone Number:</label>
+                            <input type="tel" id="phoneNumber" placeholder="Enter phone number">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="upiId">Fake UPI ID/VPA:</label>
+                            <input type="text" id="upiId" placeholder="Enter UPI ID">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount">Transaction Amount:</label>
+                            <input type="number" id="amount" placeholder="Enter amount" value="500">
+                        </div>
+
+
+
+
+
+                        <div class="form-group">
+                            <label for="messageType">Type of Suspicious Activity:</label>
+                            <select id="messageType">
+                                <option value="">Select type</option>
+                                <option value="transaction">Transaction Related</option>
+                                <option value="communication">Suspicious Communication</option>
+                                <option value="link">Suspicious Link/QR</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">Transaction Location:</label>
+                            <input type="text" id="location" placeholder="e.g., home, store, abroad">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="messageDesc">Description of the Message/Call:</label>
+                            <textarea id="messageDesc" rows="4"
+                                placeholder="Describe what happened..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="suspiciousLink">Suspicious Link URL (if any):</label>
+                            <input type="url" id="suspiciousLink" placeholder="Enter suspicious URL">
+                        </div>
+
+                        <button type="button" onclick="analyzeScam()" class="analyze-btn">
+                            <i class="fas fa-shield-alt"></i> Analyze for Fraud
+                        </button>
+                    </form>
+
+                    <div id="analysisResult" class="analysis-result">
+                        <!-- Results will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Emergency Section -->
+    <section id="emergency" class="section">
+        <div class="container">
+            <h2>Emergency - What to Do If You Are a Victim</h2>
+            <div class="emergency-steps">
+                <div class="step-card urgent">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3><i class="fas fa-phone-alt"></i> Immediately Contact Your Bank</h3>
+                        <p>Call your bank's 24x7 helpline immediately to:</p>
+                        <ul>
+                            <li>Block your debit/credit card</li>
+                            <li>Freeze your bank account if necessary</li>
+                            <li>Report unauthorized transactions</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-card urgent">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3><i class="fas fa-laptop"></i> File Cyber Crime Complaint</h3>
+                        <p>Visit the National Cyber Crime Reporting Portal:</p>
+                        <a href="https://cybercrime.gov.in" target="_blank" class="portal-link">
+                            cybercrime.gov.in
+                        </a>
+                        <p>File a detailed complaint with all transaction details.</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3><i class="fas fa-flag"></i> Report Fraudster Details</h3>
+                        <p>Help others by reporting the scammer's information:</p>
+                        <div class="report-form">
+                            <input type="text" id="reportUpiId" placeholder="Fraudster's UPI ID">
+                            <input type="tel" id="reportPhone" placeholder="Fraudster's Phone Number">
+                            <button onclick="reportFraud()" class="report-btn">Report Scammer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3><i class="fas fa-address-book"></i> Important Contact Details</h3>
+                        <div class="contact-grid">
+                            <div class="contact-item">
+                                <strong>NPCI UPI Helpline</strong>
+                                <span>1800 123 074</span>
+                            </div>
+                            <div class="contact-item">
+                                <strong>Cyber Crime Helpline</strong>
+                                <span>1930</span>
+                            </div>
+                            <div class="contact-item">
+                                <strong>Police Emergency</strong>
+                                <span>100</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prevention Tips Section -->
+    <section id="prevention" class="section">
+        <div class="container">
+            <h2>UPI Safety - Do's and Don'ts</h2>
+            <div class="prevention-grid">
+                <div class="do-section">
+                    <h3><i class="fas fa-check-circle"></i> DO's</h3>
+                    <div class="tip-card do-tip">
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Verify UPI ID carefully</strong>
+                            <p>Always double-check the UPI ID before sending money</p>
+                        </div>
+                    </div>
+                    <div class="tip-card do-tip">
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Set strong UPI PIN</strong>
+                            <p>Use a unique PIN and never share it with anyone</p>
+                        </div>
+                    </div>
+                    <div class="tip-card do-tip">
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Enable app security</strong>
+                            <p>Use biometric authentication in your UPI app</p>
+                        </div>
+                    </div>
+                    <div class="tip-card do-tip">
+                        <i class="fas fa-check"></i>
+                        <div>
+                            <strong>Check transaction history</strong>
+                            <p>Regularly monitor your UPI transaction history</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dont-section">
+                    <h3><i class="fas fa-times-circle"></i> DON'Ts</h3>
+                    <div class="tip-card dont-tip">
+                        <i class="fas fa-times"></i>
+                        <div>
+                            <strong>Never share OTP/UPI PIN</strong>
+                            <p>No legitimate service will ask for your OTP or UPI PIN</p>
+                        </div>
+                    </div>
+                    <div class="tip-card dont-tip">
+                        <i class="fas fa-times"></i>
+                        <div>
+                            <strong>Don't scan unknown QR codes</strong>
+                            <p>Avoid scanning QR codes from unknown sources</p>
+                        </div>
+                    </div>
+                    <div class="tip-card dont-tip">
+                        <i class="fas fa-times"></i>
+                        <div>
+                            <strong>Avoid public Wi-Fi for transactions</strong>
+                            <p>Use mobile data or secure networks for UPI payments</p>
+                        </div>
+                    </div>
+                    <div class="tip-card dont-tip">
+                        <i class="fas fa-times"></i>
+                        <div>
+                            <strong>Don't trust unsolicited calls</strong>
+                            <p>Hang up on calls claiming to be from bank support</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Blog Section -->
+    <section id="blog" class="section">
+        <div class="container">
+            <h2>Latest Fraud Alerts & News</h2>
+            <div class="blog-grid">
+                <article class="blog-card">
+                    <div class="blog-date">March 15, 2024</div>
+                    <h3>New "Electricity Bill" Scam Targeting Homeowners</h3>
+                    <p>Fraudsters are sending fake electricity bill payment links via SMS, pretending to be from DISCOM...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-date">October 11, 2025</div>
+                    <h3>₹200Cr+ Amount Lost to Scams</h3>
+                    <p>A staggering amount lost to various UPI scams in the past year, highlighting the need for vigilance.</p>
+                    <a href="#" class="read-more">Read More</a>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-date">October 11, 2025</div>
+                    <h3>95,000+ UPI Fraud Cases Reported (2023)</h3>
+                    <p>Statistics show a significant number of fraud cases, emphasizing the importance of secure transactions.</p>
+                    <a href="#" class="read-more">Read More</a>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-date">October 11, 2025</div>
+                    <h3>65% Victims Are Senior Citizens</h3>
+                    <p>Elderly individuals are disproportionately affected by UPI fraud, urging for targeted awareness campaigns.</p>
+                    <a href="#" class="read-more">Read More</a>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-date">March 10, 2024</div>
+                    <h3>How to Identify Fake Customer Care Numbers</h3>
+                    <p>Learn to distinguish between genuine and fake customer care numbers circulating on social media...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </article>
+
+                <article class="blog-card">
+                    <div class="blog-date">March 5, 2024</div>
+                    <h3>UPI Safety Features You Should Enable Today</h3>
+                    <p>Discover the hidden security features in your UPI app that can protect you from fraud...</p>
+                    <a href="#" class="read-more">Read More</a>
+                </article>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-shield-alt"></i> UPI Fraud Detection</h3>
+                    <p>Your trusted partner in fighting UPI fraud and creating a safer digital payment ecosystem.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home" onclick="showSection('home')">Home</a></li>
+                        <li><a href="#learn" onclick="showSection('learn')">Learn About Scams</a></li>
+                        <li><a href="#tools" onclick="showSection('tools')">Safety Tools</a></li>
+                        <li><a href="#emergency" onclick="showSection('emergency')">Emergency Help</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Emergency Contacts</h4>
+                    <ul>
+                        <li>Cyber Crime: 1930</li>
+                        <li>Police: 100</li>
+                        <li>NPCI: 1800 123 074</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 UPI Fraud Detection. All rights reserved. Stay Safe, Pay Securely.</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
-        function predictFraud(transactionData) {
-            let riskScore = 0;
+        let currentUserId = null; // Global variable to store the logged-in user's ID
 
-            if (transactionData.amount > 50000) riskScore += 0.2;
-            if (transactionData.amount > 90000) riskScore += 0.1;
-            if (transactionData.location !== 'home') riskScore += 0.2;
-            if (transactionData.time < '06:00' || transactionData.time > '23:00') riskScore += 0.2;
-            if (transactionData.recipient === 'unknown') riskScore += 0.3;
-
-            return riskScore;
+        function displayAnalysisResult(result) {
+            const analysisResultDiv = document.getElementById('analysisResult');
+            analysisResultDiv.style.display = 'block';
+            analysisResultDiv.innerHTML = `
+                <p><strong>Prediction:</strong> ${result.prediction === 1 ? 'Fraudulent' : 'Legitimate'}</p>
+                <p><strong>Probability of Fraud:</strong> ${(result.probability * 100).toFixed(2)}%</p>
+                <p><strong>Risk Level:</strong> <span class="${result.risk_level.toLowerCase()}-risk">${result.risk_level}</span></p>
+            `;
+            analysisResultDiv.className = `analysis-result ${result.risk_level.toLowerCase()}-risk`;
         }
 
-        function detectFraud() {
-            const amountInput = document.getElementById('amount');
-            const amount = parseFloat(amountInput.value);
 
-            if (amount < 1 || amount > 1000000) {
-                alert("Please enter an amount between 1 and 100000.");
-                amountInput.value = "";
+
+
+
+        async function fetchHistory() {
+            const historyListDiv = document.getElementById('history-list');
+            historyListDiv.innerHTML = 'Loading history...';
+
+            const userIdToFetch = currentUserId || 'guest_user';
+
+            try {
+                const response = await fetch(`http://127.0.0.1:5000/api/history?user_id=${userIdToFetch}`);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to fetch history.');
+                }
+                const history = await response.json();
+                appendHistoryToElement('history-list', history);
+            } catch (error) {
+                console.error('Error fetching history:', error);
+                historyListDiv.innerHTML = `<p style="color: red;">Error loading history: ${error.message}</p>`;
+            }
+        }
+
+        function appendHistoryToElement(elementId, history) {
+            const targetElement = document.getElementById(elementId);
+            if (!targetElement) return;
+
+            // Clear previous history if it's the main history list
+            if (elementId === 'history-list') {
+                targetElement.innerHTML = ''; 
+            }
+
+            if (history.length === 0) {
+                targetElement.innerHTML += '<p>No analysis history found.</p>';
                 return;
             }
 
-            const transactionData = {
-                amount: amount,
-                location: document.getElementById('location').value.toLowerCase(),
-                time: document.getElementById('time').value,
-                recipient: document.getElementById('recipient').value
-            };
+            history.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                const itemDate = new Date(item.timestamp);
+                const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                const formattedDate = itemDate.toLocaleDateString(undefined, options);
+                const formattedTime = itemDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+                const dayOfWeek = itemDate.toLocaleDateString(undefined, { weekday: 'short' });
 
-            const riskScore = predictFraud(transactionData);
-            const resultDiv = document.getElementById('result');
-            resultDiv.style.display = 'block';
+                historyItem.innerHTML = `
+                    <p><strong>Date:</strong> ${formattedDate} (${dayOfWeek})</p>
+                    <p><strong>Time:</strong> ${formattedTime}</p>
+                    <p><strong>Amount:</strong> ${item.amount}</p>
+                    <p><strong>Type:</strong> ${item.transaction_type}</p>
+                    <p><strong>Location:</strong> ${item.location}</p>
+                    <p><strong>Prediction:</strong> ${item.prediction === 1 ? 'Fraud' : 'Legitimate'}</p>
+                    <p><strong>Probability:</strong> ${(item.probability * 100).toFixed(2)}%</p>
+                    <p><strong>Risk Level:</strong> <span style="color: ${item.risk_level === 'HIGH' ? 'red' : (item.risk_level === 'MEDIUM' ? 'orange' : 'green')};">${item.risk_level}</span></p>
+                    <hr>
+                `;
+                targetElement.appendChild(historyItem);
+            });
+        }
 
-            if (riskScore > 0.7) {
-                resultDiv.style.backgroundColor = '#ffebee';
-                resultDiv.innerHTML = `
-                    <h3>High Fraud Risk (${(riskScore * 100).toFixed(1)}%)</h3>
-                    <p>This transaction appears suspicious. Please verify the details.</p>
-                `;
-            } else if (riskScore > 0.4) {
-                resultDiv.style.backgroundColor = '#fff3e0';
-                resultDiv.innerHTML = `
-                    <h3>Medium Fraud Risk (${(riskScore * 100).toFixed(1)}%)</h3>
-                    <p>This transaction shows some risk factors. Proceed with caution.</p>
-                `;
+        // Navigation and Section Management
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize the first section as active
+            showSection('home');
+
+            // Setup navigation
+            setupNavigation();
+
+            // Setup mobile menu
+            setupMobileMenu();
+
+            // Hide logout button initially (if it exists)
+            const logoutNavItem = document.getElementById('logout-nav-item');
+            if (logoutNavItem) {
+                logoutNavItem.style.display = 'none';
+            }
+        });
+
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    if (href.startsWith('#')) {
+                        e.preventDefault();
+                        const targetSection = href.substring(1);
+                        showSection(targetSection);
+                    }
+
+                    // Close mobile menu if open
+                    const navMenu = document.querySelector('.nav-menu');
+                    navMenu.classList.remove('active');
+                });
+            });
+        }
+
+        function setupMobileMenu() {
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.querySelector('.nav-menu');
+
+            hamburger.addEventListener('click', function () {
+                navMenu.classList.toggle('active');
+                hamburger.classList.toggle('active');
+            });
+        }
+
+        function togglePassword(id) {
+            const input = document.getElementById(id);
+            const icon = input.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
             } else {
-                resultDiv.style.backgroundColor = '#e8f5e9';
-                resultDiv.innerHTML = `
-                    <h3>Low Fraud Risk (${(riskScore * 100).toFixed(1)}%)</h3>
-                    <p>This transaction appears safe.</p>
-                `;
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
             }
         }
+
+        function switchLogin(type) {
+            const userForm = document.getElementById('user-login-form');
+            const adminForm = document.getElementById('admin-login-form');
+            const userBtn = document.querySelector('.tab-btn[onclick*="user"]');
+            const adminBtn = document.querySelector('.tab-btn[onclick*="admin"]');
+
+            if (type === 'user') {
+                userForm.classList.add('form-active');
+                adminForm.classList.remove('form-active');
+                userBtn.classList.add('active');
+                adminBtn.classList.remove('active');
+            } else {
+                userForm.classList.remove('form-active');
+                adminForm.classList.add('form-active');
+                userBtn.classList.remove('active');
+                adminBtn.classList.add('active');
+            }
+        }
+
+        function showUserSignupForm() {
+            document.getElementById('user-login-form').classList.remove('form-active');
+            document.getElementById('user-signup-form').classList.add('form-active');
+        }
+
+        function showUserLoginForm() {
+            document.getElementById('user-signup-form').classList.remove('form-active');
+            document.getElementById('user-login-form').classList.add('form-active');
+        }
+
+        function handleAuth(type, userType) { // Added userType parameter
+            const authMessageDiv = document.getElementById('auth-message');
+            authMessageDiv.style.display = 'block';
+
+            if (type === 'login') {
+                authMessageDiv.style.color = 'green';
+                authMessageDiv.textContent = 'Login Successful!';
+                setTimeout(() => {
+                    authMessageDiv.style.display = 'none';
+                    if (userType === 'admin') { // Check userType
+                        showSection('admin-dashboard'); // Redirect to admin dashboard
+                    } else {
+                        showSection('user-dashboard'); // Redirect to user dashboard
+                    }
+                }, 2000);
+            } else if (type === 'signup') {
+                authMessageDiv.style.color = 'green';
+                authMessageDiv.textContent = 'Congratulations! Account created successfully!';
+                setTimeout(() => {
+                    authMessageDiv.style.display = 'none';
+                    showSection('user-dashboard'); // New users go to user dashboard
+                }, 2000);
+            }
+            return false; // Prevent form submission
+        }
+
+        function createMoney() {
+            console.log('createMoney called');
+            const moneyContainer = document.querySelector('.money-container');
+            if (!moneyContainer) {
+                console.log('moneyContainer not found');
+                return;
+            }
+            moneyContainer.innerHTML = ''; // Clear existing money
+            for (let i = 0; i < 20; i++) {
+                const money = document.createElement('div');
+                money.classList.add('money');
+                money.innerHTML = '₹';
+                money.style.left = Math.random() * 100 + 'vw';
+                money.style.animationDuration = Math.random() * 3 + 2 + 's'; // Faster fall
+                money.style.animationDelay = Math.random() * 5 + 's';
+                moneyContainer.appendChild(money);
+                console.log('Money element created:', money);
+            }
+        }
+
+        function showSection(sectionId) {
+            console.log('showSection called with:', sectionId);
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show target section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                if (sectionId === 'auth') {
+                    createMoney();
+                }
+
+                // Update active nav link
+                const navLinks = document.querySelectorAll('.nav-menu a');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Scam Checker Functionality
+        async function analyzeScam() {
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const upiId = document.getElementById('upiId').value;
+            const messageType = document.getElementById('messageType').value;
+            const messageDesc = document.getElementById('messageDesc').value;
+            const suspiciousLink = document.getElementById('suspiciousLink').value;
+
+            // New fields
+            const amount = parseFloat(document.getElementById('amount').value);
+            const location = document.getElementById('location').value; // Get location from new input
+
+            // Basic validation
+            if (isNaN(amount) || amount <= 0) {
+                alert('Please enter a valid transaction amount.');
+                return;
+            }
+            if (!messageType) {
+                alert('Please select a type of suspicious activity.');
+                return;
+            }
+            // phoneNumber, upiId, messageDesc, suspiciousLink are optional for ML model, but good for context
+            // location can be empty, will default to 'unknown' in dataToSend if empty
+
+            const dataToSend = {
+                user_id: currentUserId || 'guest_user',
+                amount: amount,
+                transaction_type: messageType,
+                location: location || 'unknown' // Use provided location or default to 'unknown'
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/predict_fraud', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(dataToSend),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Something went wrong on the server.');
+                }
+
+                const result = await response.json();
+                displayAnalysisResult(result);
+
+                // After displaying current analysis, fetch and display history in the same div
+                const userIdToFetch = currentUserId || 'guest_user';
+                const historyResponse = await fetch(`http://127.0.0.1:5000/api/history?user_id=${userIdToFetch}`);
+                if (!historyResponse.ok) {
+                    const errorData = await historyResponse.json();
+                    throw new Error(errorData.message || 'Failed to fetch history after analysis.');
+                }
+                const history = await historyResponse.json();
+                
+                const analysisResultDiv = document.getElementById('analysisResult');
+                analysisResultDiv.innerHTML += '<h4 style="margin-top: 2rem; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 1rem;">Analysis History:</h4>';
+                appendHistoryToElement('analysisResult', history);
+
+            } catch (error) {
+                console.error('Error analyzing scam:', error);
+                alert(`Analysis failed: ${error.message}`);
+            }
+        }
+
+        function displayAnalysisResult(result) {
+            const resultDiv = document.getElementById('analysisResult');
+            const fraudProbability = (result.probability * 100).toFixed(2);
+            const riskLevel = result.risk_level;
+
+            let riskColor = '#10b981'; // green
+            if (riskLevel === 'MEDIUM') riskColor = '#f59e0b'; // amber
+            if (riskLevel === 'HIGH') riskColor = '#ef4444'; // red
+
+            const primaryModel = result.cnn_confidence > result.simple_confidence ? 'CNN Model' : 'Simple Model';
+
+            resultDiv.className = `analysis-result ${riskLevel.toLowerCase()}-risk`;
+            resultDiv.style.display = 'block';
+
+            resultDiv.innerHTML = `
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <h3 style="color: ${riskColor}; margin-bottom: 0.5rem;">
+                        ${riskLevel} Fraud Risk (${fraudProbability}%)
+                    </h3>
+                    <p><strong>Primary Model Used:</strong> ${primaryModel}</p>
+                    <p><strong>CNN Confidence:</strong> ${(result.cnn_confidence * 100).toFixed(2)}%</p>
+                    <p><strong>Simple Model Confidence:</strong> ${(result.simple_confidence * 100).toFixed(2)}%</p>
+                </div>
+                
+                <div style="background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                    <strong>Analysis:</strong> The system detected a ${riskLevel.toLowerCase()}-risk transaction with a fraud probability of ${fraudProbability}%.
+                </div>
+                
+                <div>
+                    <strong>Recommended Actions:</strong>
+                    <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                        <li>Always verify the recipient's details before making a transaction.</li>
+                        <li>Be cautious of unsolicited requests for money or personal information.</li>
+                        <li>If the risk is HIGH, immediately contact your bank and report to cyber crime authorities.</li>
+                        <li>If the risk is MEDIUM, proceed with caution and double-check all details.</li>
+                        <li>If the risk is LOW, continue to be vigilant.</li>
+                    </ul>
+                </div>
+                
+                <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.1);">
+                    <small>
+                        <i class="fas fa-info-circle"></i> 
+                        This analysis is based on machine learning models. Always verify through official channels.
+                    </small>
+                </div>
+            `;
+        }
+
+
+        // Quiz Functionality
+                const quizQuestions = [
+                    {
+                        question: "You receive a call saying your bank KYC will expire and you need to share an OTP to renew it. What should you do?",
+                        options: [
+                            "Share the OTP immediately to avoid account blockage",
+                            "Hang up and call your bank's official customer care number",
+                            "Ask them to send a verification link via SMS",
+                            "Provide your UPI PIN for verification"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Never share OTP with anyone. Banks never call to ask for OTP. Always call back using official numbers from your bank's website or app."
+                    },
+                    {
+                        question: "A stranger sends you a collect request for ₹1 saying it's for verification. What do you do?",
+                        options: [
+                            "Accept the request since it's only ₹1",
+                            "Decline the request and block the sender",
+                            "Ask why they need verification",
+                            "Send them a payment request back"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Never accept collect requests from unknown persons. Even small amounts can be used to verify active accounts for larger scams."
+                    },
+                    {
+                        question: "You get an SMS with a link to claim a lottery prize you never entered. What's the safest action?",
+                        options: [
+                            "Click the link to see if you really won",
+                            "Share the message with friends to check if it's real",
+                            "Delete the message immediately",
+                            "Call the number provided to verify"
+                        ],
+                        correctAnswer: 2,
+                        explanation: "Lottery scams are common. Never click links or call numbers from unsolicited messages about winnings."
+                    },
+                    {
+                        question: "A delivery executive asks you to scan a QR code for ₹10 shipping charges on a free product. What should you do? ",
+                        options: [
+                            "Scan the QR and pay ₹10",
+                            "Ask for an official receipt first",
+                            "Refuse to pay and report to the e-commerce platform",
+                            "Pay using cash instead"
+                        ],
+                        correctAnswer: 2,
+                        explanation: "Legitimate deliveries don't ask for additional payments via QR codes. Report such incidents to the platform immediately."
+                    },
+                    {
+                        question: "What information should you NEVER share with anyone?",
+                        options: [
+                            "Your UPI PIN and OTP",
+                            "Your email address",
+                            "Your name",
+                            "Your city name"
+                        ],
+                        correctAnswer: 0,
+                        explanation: "UPI PIN and OTP are like your digital signature. Never share them with anyone, including people claiming to be from your bank."
+                    },
+                    {
+                        question: "You receive a message from an unknown number claiming to be from the income tax department, asking for your bank details to process a refund. What should you do?",
+                        options: [
+                            "Provide your bank details to get the refund quickly",
+                            "Ignore the message and block the number",
+                            "Call the number to verify their identity",
+                            "Click on any link provided in the message"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Government agencies or banks will never ask for your bank details via unsolicited messages. Always verify such claims through official channels."
+                    },
+                    {
+                        question: "You see an advertisement on social media offering a very high return on a small investment via UPI. What's your best course of action?",
+                        options: [
+                            "Invest a small amount to test it out",
+                            "Research the company thoroughly and check for official registrations",
+                            "Share it with friends to get their opinion",
+                            "Report the advertisement as a potential scam"
+                        ],
+                        correctAnswer: 3,
+                        explanation: "If an investment opportunity seems too good to be true, it usually is. High-return, low-risk investments are often scams. Report suspicious ads."
+                    },
+                    {
+                        question: "Your friend sends you a message asking for money urgently via UPI, but the tone of the message seems unusual. What should you do?",
+                        options: [
+                            "Send the money immediately, as your friend needs help",
+                            "Call your friend directly to confirm the request",
+                            "Reply to the message asking for more details",
+                            "Assume it's a scam and block your friend"
+                        ],
+                        correctAnswer: 1,
+                        explanation: "Always verify urgent money requests from friends or family through a different communication channel (like a phone call) to ensure their account hasn't been compromised."
+                    }
+                ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        let currentQuizQuestions = []; // To store the randomly selected questions
+
+        function startQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+
+            // Shuffle questions and select 5
+            const shuffledQuestions = quizQuestions.sort(() => Math.random() - 0.5);
+            currentQuizQuestions = shuffledQuestions.slice(0, 5);
+
+            document.getElementById('quizStart').style.display = 'none';
+            document.getElementById('quizQuestions').style.display = 'block';
+            document.getElementById('quizResult').style.display = 'none';
+
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const quizQuestionsDiv = document.getElementById('quizQuestions');
+            const question = currentQuizQuestions[currentQuestion]; // Use currentQuizQuestions
+
+            quizQuestionsDiv.innerHTML = `
+                <div class="quiz-question">
+                    <h3>Question ${currentQuestion + 1} of ${currentQuizQuestions.length}</h3>
+                    <p>${question.question}</p>
+                    
+                    <div class="quiz-options">
+                        ${question.options.map((option, index) => `
+                            <div class="quiz-option" onclick="selectAnswer(${index})">
+                                ${option}
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="quiz-navigation">
+                        <button onclick="previousQuestion()" ${currentQuestion === 0 ? 'disabled' : ''}>
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </button>
+                        <button onclick="nextQuestion()">
+                            ${currentQuestion === currentQuizQuestions.length - 1 ? 'Finish Quiz' : 'Next <i class="fas fa-arrow-right"></i>'}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Restore selected answer if exists
+            if (userAnswers[currentQuestion] !== undefined) {
+                const options = quizQuestionsDiv.querySelectorAll('.quiz-option');
+                options[userAnswers[currentQuestion]].classList.add('selected');
+            }
+        }
+
+        function selectAnswer(answerIndex) {
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(option => option.classList.remove('selected'));
+            options[answerIndex].classList.add('selected');
+
+            userAnswers[currentQuestion] = answerIndex;
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                loadQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (userAnswers[currentQuestion] === undefined) {
+                alert('Please select an answer before proceeding.');
+                return;
+            }
+
+            if (currentQuestion < currentQuizQuestions.length - 1) { // Use currentQuizQuestions
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+        function finishQuiz() {
+            // Calculate score
+            score = 0;
+            currentQuizQuestions.forEach((question, index) => { // Use currentQuizQuestions
+                if (userAnswers[index] === question.correctAnswer) {
+                    score++;
+                }
+            });
+
+            const percentage = (score / currentQuizQuestions.length) * 100; // Use currentQuizQuestions
+            let safetyLevel, message, color;
+
+            if (percentage >= 80) {
+                safetyLevel = "Fraud Guardian";
+                message = "Excellent! You're well-prepared to identify and avoid UPI scams.";
+                color = "#10b981";
+            } else if (percentage >= 60) {
+                safetyLevel = "Safety Conscious";
+                message = "Good awareness, but there's room for improvement. Review the explanations below.";
+                color = "#f59e0b";
+            } else {
+                safetyLevel = "Learning Beginner";
+                message = "It's important to learn more about UPI safety. Study the explanations carefully.";
+                color = "#ef4444";
+            }
+
+            document.getElementById('quizQuestions').style.display = 'none';
+            document.getElementById('quizResult').style.display = 'block';
+
+            document.getElementById('quizResult').innerHTML = `
+        <div style="text-align: center; padding: 2rem;">
+            <h3 style="color: ${color}; margin-bottom: 1rem;">Your Safety Level: ${safetyLevel}</h3>
+            <p><strong>Score:</strong> ${score} out of ${currentQuizQuestions.length} (${percentage.toFixed(0)}%)</p>
+            <p>${message}</p>
+            
+            <div style="margin-top: 2rem; text-align: left;">
+                <h4>Question Review:</h4>
+                ${currentQuizQuestions.map((question, index) => `
+                    <div style="margin: 1rem 0; padding: 1rem; background: #f8fafc; border-radius: 8px;">
+                        <p><strong>Q${index + 1}:</strong> ${question.question}</p>
+                        <p style="color: ${userAnswers[index] === question.correctAnswer ? '#10b981' : '#ef4444'};">
+                            <strong>Your answer:</strong> ${question.options[userAnswers[index]]}
+                        </p>
+                        <p style="color: #10b981;">
+                            <strong>Correct answer:</strong> ${question.options[question.correctAnswer]}
+                        </p>
+                        <p><strong>Explanation:</strong> ${question.explanation}</p>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <button onclick="startQuiz()" class="quiz-start-btn" style="margin-top: 2rem;">
+                <i class="fas fa-redo"></i> Retake Quiz
+            </button>
+        </div>
+    `;
+        }
+
+        // Emergency Reporting
+        function reportFraud() {
+            const upiId = document.getElementById('reportUpiId').value;
+            const phone = document.getElementById('reportPhone').value;
+
+            if (!upiId && !phone) {
+                alert('Please provide at least UPI ID or phone number to report.');
+                return;
+            }
+
+            // Simulate reporting (in real app, this would send to backend)
+            alert(`Thank you for reporting!\n\nReported UPI ID: ${upiId || 'Not provided'}\nReported Phone: ${phone || 'Not provided'}\n\nThis information will help protect others from similar scams.`);
+
+            // Clear form
+            document.getElementById('reportUpiId').value = '';
+            document.getElementById('reportPhone').value = '';
+        }
+
+        // Utility Functions
+        function formatPhoneNumber(phone) {
+            return phone.replace(/(d{3})(d{3})(d{4})/, '$1-$2-$3');
+        }
+
+        function validateUPIId(upiId) {
+            const upiRegex = /^[a-zA-Z0-9._-]{2,256}@[a-zA-Z]{2,64}$/;
+            return upiRegex.test(upiId);
+        }
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+
+        // Call toggleForm('login') to show login by default when the page loads
+        // This will be handled by the showSection('login') call from the nav link
     </script>
+
+
 </body>
+
 </html>
