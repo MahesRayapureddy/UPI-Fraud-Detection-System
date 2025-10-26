@@ -18,8 +18,8 @@ Continuous Learning Framework: Supports ongoing adaptation, enabling the model t
 Scalable and Foundational: Designed for seamless integration and expansion across financial platforms, enhancing security and user trust in digital payments.
 
 **Contact:** +91-7382825657  
-[Email Me](mailto:your.mahesrayapureddy23@gmail.com)  
-[GitHub](https://github.com/MahesRayapureddy)
+[Email Me]mailto:your.mahesrayapureddy23@gmail.com 
+[GitHub]https://github.com/MahesRayapureddy
 [Linkedin](www.linkedin.com/in/
 rayapureddy-maheswara-reddy-b08253305).
 
@@ -55,62 +55,49 @@ cd upi-fraud-detection
 source .venv/bin/activate
 
 3.Installation Required Dependencies
+
       pip install -r requirements.txt
       Ensure requirements.txt contains all necessary libraries like scikit-learn, pandas, numpy, matplotlib, or any deep learning libraries.If it NEED.
 
 
 Usage Steps
+
 1.Prepare the Dataset
+
  Add your historical transaction data in the specified format (CSV or as required by the code). Make sure your dataset contains relevant features: transaction amount, type, date, user ID, location, and fraud label.
+ 
 2.Train the Model
+
  python train_model.py
+ 
 This script usually handles feature engineering, training, and validation of the ML model
+
 3.Run Fraud Detection on New Data
+
   python detect_fraud.py --input your_new_transactions.csv
+  
 This applies the trained model to new transactions and predicts whether they are fraudulent.
+
 4.Start the Web App (if applicable)
+
  python app.py
+ 
  Opens a web interface to upload data and view results. Credentials (if included) are typically defaulted to admin/admin or explained in documentation
+ 
 5.Advanced/Optional
+
  Start web dashboard or monitoring interface (if present in your repo):
  python frontend/server.py
 
  Common Environment Setup
+ 
  Python Version: 3.8 or later
  Additional Tools: Jupyter Notebook (for experimentation/demo), Docker (for containerized deployment, optional)
  System Requirements: Basic CPU/RAM as per your dataset/model requirements, and pip for package management.
  
  NOTE
+ 
  Update the commands and script names to match your repository's structure. You can modify or expand these instructions to reflect any real-time data integration or API features that your system provides.
 This structure is widely used in well-documented UPI fraud detection ML projects and will help any user to install, run, and test your system efficiently.
 
-Example Image Links for README
->Workflow or Architecture Diagram
- (Image shows an ML-based UPI fraud detection workflow) 
->Sample Dashboard UI
- (Demonstrates a fraud detection result interface) 
->Confusion Matrix or ML Output
- (Confusion matrix for fraudulent vs normal transaction prediction)
->Feature Importance Visualization
- (General fraud detection, showing which features are most important)
->Streaming/Real-time Monitoring Screen
-  (Generic, can be labeled for your use)
 
-ITS NOT ORIGINAL ..SCREENSHOTS AND LINKS ..
-     ## Screenshots
-
-### Workflow Diagram
-![UPI Fraud Detection Workflow](https://www.atlantis-press.com/article/126016569/figure/1)
-
-### Dashboard Interface
-![UPI Fraud Detection Dashboard](https://user-images.githubusercontent.com/48468961/211659541-63e519ef-83cb-48f1-8e83-429aee920967.png)
-
-### Confusion Matrix
-![Confusion Matrix](https://raw.githubusercontent.com/sergio11/online_payment_fraud/main/conf_matrix.png)
-
-### Feature Importance
-![Feature Importance Visualization](https://raw.githubusercontent.com/ogozuacik/Kaggle-Credit-Card-Fraud-Detection/master/images/feature_importance.png)
-
-These links illustrate typical visuals used in fraud detection README files and are accepted in the open-source/data science community.
-
-    
