@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+*.sqlite
+*.db
+.venv/
+venv/
+
+# Operating System / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Logs
+*.log
