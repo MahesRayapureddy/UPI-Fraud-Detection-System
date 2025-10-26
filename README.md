@@ -20,8 +20,8 @@ Scalable and Foundational: Designed for seamless integration and expansion acros
 **Contact:** +91-7382825657  
 [Email Me]mailto:your.mahesrayapureddy23@gmail.com 
 [GitHub]https://github.com/MahesRayapureddy
-[Linkedin](www.linkedin.com/in/
-rayapureddy-maheswara-reddy-b08253305).
+[Linkedin]www.linkedin.com/in/
+rayapureddy-maheswara-reddy-b08253305
 
 ## Table of Contents
 
